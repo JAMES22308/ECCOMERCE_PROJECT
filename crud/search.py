@@ -1,11 +1,6 @@
 from config import PRODUCTS_INFO
 import json
-
-def dic_reader():
-    with open(PRODUCTS_INFO, 'r')as file:
-        content = json.load(file)
-    return content
-
+from crud.add import dic_reader
 
 
 def display_products(product_info_id, product_name, product_list):
@@ -59,6 +54,13 @@ def sort_product(products, product_id, product_name, category):
 def search_product():
 
     products = dic_reader()
+    print("\n🗂️ ===== CURRENT PRODUCT LIST ===== 🗂️\n")
+    for product in products:
+        print("🆔 ID          :", product['id'])
+        print("🔤 Name        :", product['name'])
+        print("💵 Price       :", product['price'])
+        print("📦 Category    :", product['category'])
+        print("-" * 40)
 
     product_id = input("Enter Product ID (press Enter to skip): ").strip()
     product_name = input("Enter Product Name (press Enter to skip): ").strip()

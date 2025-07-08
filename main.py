@@ -3,6 +3,7 @@ from auth.login_page import login
 from crud.add import add_product
 from crud.search import search_product
 from crud.edit import edit_product
+from crud.delete import delete_product
 
 def option():
     print("\n" + "=" * 40)
@@ -62,6 +63,8 @@ def main():
                 search_product()
             elif prompt == 3:
                 edit_product()
+            elif prompt == 4:
+                delete_product()
     
     if auth == 'user':
         print('user account dashboard')
