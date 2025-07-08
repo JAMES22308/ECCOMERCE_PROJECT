@@ -14,17 +14,17 @@ def empty_list():
         with open(PRODUCTS_INFO, 'w')as file:
             json.dump([], file)
 
-def product_name():
+def product_name(n="name: "):
     while True:
-        name = input('name: ')
+        name = input(n)
         if name.replace(' ', '').isalpha():
             return name
         else:
             print('must be an alpha')
     
-def product_price():
+def product_price(p="price: "):
     while True:
-        price = input('price: ')
+        price = input(p)
         if price.replace(' ', '').isdigit():
             converted = float(price)
             return converted
@@ -32,9 +32,9 @@ def product_price():
             print('must be a digit')
     
 
-def product_stock():
+def product_stock(s="stock: "):
     while True:
-        stock = input('stock: ')
+        stock = input(s)
         if stock.replace(' ', '').isdigit():
             converted = int(stock)
             return converted
@@ -42,9 +42,9 @@ def product_stock():
             print('must be a digit')
     
 
-def product_category():
+def product_category(c="category: "):
     while True:
-        category = input('category: ')
+        category = input(c)
         if category.replace(' ', '').isalpha():
             return category
         else:
