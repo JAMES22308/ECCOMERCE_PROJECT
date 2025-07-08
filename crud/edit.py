@@ -1,14 +1,11 @@
 import json
 from config import PRODUCTS_INFO
-from crud.add import product_name, product_price, product_stock, product_category
+from crud.add import product_name, product_price, product_stock, product_category, dic_reader
 
-def dict_reader():
-    with open(PRODUCTS_INFO, 'r')as file:
-        content = json.load(file)
-    return content
+
 
 def edit_product():
-    products = dict_reader()
+    products = dic_reader()
 
     product_id = input('search by id: ').strip()
 
