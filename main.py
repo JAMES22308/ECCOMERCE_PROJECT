@@ -4,6 +4,7 @@ from crud.add import add_product
 from crud.search import search_product
 from crud.edit import edit_product
 from crud.delete import delete_product
+from crud.products import view_all_products
 
 def option():
     print("\n" + "=" * 40)
@@ -45,6 +46,7 @@ def get_options():
         '2': 'search',
         '3': 'edit',
         '4': 'delete',
+        '5': 'all products'
     }
     print()
     for key, value in options.items():
@@ -56,7 +58,7 @@ def main():
         print('admin account dashboard')
         while True:
             get_options()
-            prompt = int(input('choose an option: '))
+            prompt = int(input('\nChoose an option: '))
             if prompt == 1:
                 add_product()
             elif prompt == 2:
@@ -65,6 +67,8 @@ def main():
                 edit_product()
             elif prompt == 4:
                 delete_product()
+            elif prompt == 5:
+                view_all_products()
     
     if auth == 'user':
         print('user account dashboard')

@@ -3,6 +3,18 @@ import json
 from crud.add import dic_reader
 
 
+
+def current_products(products):
+    print("\n🗂️ ===== CURRENT PRODUCT LIST ===== 🗂️\n")
+    for product in products:
+        print("🆔 ID          :", product['id'])
+        print("🔤 Name        :", product['name'])
+        print("💵 Price       :", product['price'])
+        print("📦 Category    :", product['category'])
+        print("-" * 40)
+
+
+
 def display_products(product_info_id, product_name, product_list):
     if product_info_id:
         print('\n🆔========= PRODUCT ID MATCH =========🆔\n')
@@ -52,35 +64,30 @@ def sort_product(products, product_id, product_name, category):
 
 
 def search_product():
+    try:
+        products = dic_reader()
+        current_products(products)
 
-    products = dic_reader()
-    print("\n🗂️ ===== CURRENT PRODUCT LIST ===== 🗂️\n")
-    for product in products:
-        print("🆔 ID          :", product['id'])
-        print("🔤 Name        :", product['name'])
-        print("💵 Price       :", product['price'])
-        print("📦 Category    :", product['category'])
-        print("-" * 40)
+        product_id = input("Enter Product ID (press Enter to skip): ").strip()
+        product_name = input("Enter Product Name (press Enter to skip): ").strip()
+        category = input("Enter Category (press Enter to skip): ").strip()
+        
 
-    product_id = input("Enter Product ID (press Enter to skip): ").strip()
-    product_name = input("Enter Product Name (press Enter to skip): ").strip()
-    category = input("Enter Category (press Enter to skip): ").strip()
-    
+        product_id = int(product_id) if product_id and product_id.replace(' ', '').isdigit() else None  
+        product_name = product_name if product_name else None
 
-    product_id = int(product_id) if product_id and product_id.replace(' ', '').isdigit() else None  
-    product_name = product_name if product_name else None
+        category = category if category else None
 
-    category = category if category else None
+        results = sort_product(products, product_id, product_name, category)
 
-    results = sort_product(products, product_id, product_name, category)
+        product_info_id = results[0]
+        product_name = results[1]
+        product_list = results[2]
 
-    product_info_id = results[0]
-    product_name = results[1]
-    product_list = results[2]
+        display_products(product_info_id, product_name, product_list)
 
-    display_products(product_info_id, product_name, product_list)
-
-   
+    except json.decoder.JSONDecodeError:
+        print('no data in the system yet')
 
   
 
