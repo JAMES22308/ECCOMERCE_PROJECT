@@ -19,37 +19,41 @@ def get_password(p="password: "):
 
 
 def login():
-    print("\n" + "=" * 40)
-    print("           🔐 LOGIN PAGE")
-    print("=" * 40 + "\n")
-    database = dict_reader()
-    email = get_email()
-    if not email:
-        print("\n[❌] Invalid email. Please try again.\n")
-        return
-    account = None
-    for data in database:
-        if data['email'] == email:
-            account = data
-            break
-    
-    if not account:
-        print("\n[⚠️] Email doesn't exist in our system.\n")
-        return
-    
-    attempts = 0
-    while attempts < 3:
-        password = get_password()
-        if account['password'] == password:
-            return 'admin' if account['role'] == 'admin' else 'user'
-        else:
-            attempts += 1
-            print(f"[🔐] Wrong password: Attempt {attempts}/3")
 
-    print("\n" + "-" * 45)
-    print("🚫 Account has been temporarily locked due to")
-    print("   multiple failed login attempts.")
-    print("-" * 45 + "\n")
+    try:
+        print("\n" + "=" * 40)
+        print("           🔐 LOGIN PAGE")
+        print("=" * 40 + "\n")
+        database = dict_reader()
+        email = get_email()
+        if not email:
+            print("\n[❌] Invalid email. Please try again.\n")
+            return
+        account = None
+        for data in database:
+            if data['email'] == email:
+                account = data
+                break
+        
+        if not account:
+            print("\n[⚠️] Email doesn't exist in our system.\n")
+            return
+        
+        attempts = 0
+        while attempts < 3:
+            password = get_password()
+            if account['password'] == password:
+                return 'admin' if account['role'] == 'admin' else 'user'
+            else:
+                attempts += 1
+                print(f"[🔐] Wrong password: Attempt {attempts}/3")
+
+        print("\n" + "-" * 45)
+        print("🚫 Account has been temporarily locked due to")
+        print("   multiple failed login attempts.")
+        print("-" * 45 + "\n")
+    except json.decoder.JSONDecodeError:
+        print('no account is registered in the system yet')
 
    
 if __name__ == '__main__':
