@@ -58,15 +58,17 @@ def get_options():
 
 def user_get_options():
     options = {
-        '1': 'view all products',
-        '2': 'view cart',
-        '3': 'view orders',
-        '4': 'logout'
+        '1': '🛍️ View All Products',
+        '2': '🧺 View My Cart',
+        '3': '📦 View My Orders',
+        '4': '🔓 Logout'
     }
-    print()
+    print('\n' + '='*45)
+    print("📋 What would you like to do today?")
+    print('-'*45)
     for key, value in options.items():
-        print(f"{key}: {value}")
-
+        print(f" [{key}] {value}")
+    print('='*45 + '\n')
 
 def main():
     auth = authentication()
@@ -88,12 +90,14 @@ def main():
     
     if auth[0] == 'user':
         user = auth[1]
-        print('welcome back ', user['email'])
-        print('user account dashboard')
-        user_get_options()
+        print('\n' + '='*50)
+        print(f"👋 Welcome, {user['email'].replace("@gmail.com", "")}!")
+        print("🧾 USER ACCOUNT DASHBOARD")
+        print('='*50)
 
         while True:
-            option = int(input('Choose an option: '))
+            user_get_options()
+            option = int(input('\nChoose an option: '))
             if option == 1:
                 add_user_product(user)
             else:
