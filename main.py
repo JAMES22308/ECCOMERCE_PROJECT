@@ -1,10 +1,12 @@
 from auth.register_page import register
 from auth.login_page import login
-from crud.add import add_product
+from crud.add import add_product, dic_reader
 from crud.search import search_product
 from crud.edit import edit_product
 from crud.delete import delete_product
 from crud.products import view_all_products
+from user_crud.add import add_user_product
+
 
 def option():
     print("\n" + "=" * 40)
@@ -52,9 +54,23 @@ def get_options():
     for key, value in options.items():
         print(f"{key}: {value}")
 
+
+
+def user_get_options():
+    options = {
+        '1': 'view all products',
+        '2': 'view cart',
+        '3': 'view orders',
+        '4': 'logout'
+    }
+    print()
+    for key, value in options.items():
+        print(f"{key}: {value}")
+
+
 def main():
     auth = authentication()
-    if auth == 'admin':
+    if auth[0] == 'admin':
         print('admin account dashboard')
         while True:
             get_options()
@@ -70,8 +86,21 @@ def main():
             elif prompt == 5:
                 view_all_products()
     
-    if auth == 'user':
+    if auth[0] == 'user':
+        user = auth[1]
+        print('welcome back ', user['email'])
         print('user account dashboard')
+        user_get_options()
+
+        while True:
+            option = int(input('Choose an option: '))
+            if option == 1:
+                add_user_product(user)
+            else:
+                print('wrong key')
+            
+
+        
 
 
 

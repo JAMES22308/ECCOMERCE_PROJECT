@@ -95,7 +95,9 @@ def register():
         'id': unique_id(),
         'email': email,
         'password': password,
-        'role': 'admin' if 'admin' in email else 'user'
+        'role': 'admin' if 'admin' in email else 'user',
+        'cart': [],
+        'orders': []
     }
     with open(database, 'r') as file:
         content = json.load(file)
