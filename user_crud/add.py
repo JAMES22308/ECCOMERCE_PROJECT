@@ -49,6 +49,8 @@ def product_quantity(products, item_order, user):
 
                     if same_id:
                         account['cart'][index]['quantity'] = account['cart'][index]['quantity'] + quantity
+                        account['cart'][index]['total_price'] = account['cart'][index]['quantity'] * product_info['price']
+
                         print(f'quantity increased by {quantity}')
 
 
@@ -56,7 +58,9 @@ def product_quantity(products, item_order, user):
                         account['cart'].append({
                             'order_id': product_info['id'],
                             'product_name': product_info['name'],
-                            'quantity': quantity
+                            'quantity': quantity,
+                            'price': product_info['price'],
+                            'total_price': product_info['price'] * quantity
                         })
                         print('added to cart')
 
