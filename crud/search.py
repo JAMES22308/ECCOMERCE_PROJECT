@@ -10,6 +10,7 @@ def current_products(products):
         print("🆔 ID          :", product['id'])
         print("🔤 Name        :", product['name'])
         print("💵 Price       :", product['price'])
+        print("💵 Stock       :", product['stock'])
         print("📦 Category    :", product['category'])
         print("-" * 40)
 

@@ -43,7 +43,7 @@ def login():
         while attempts < 3:
             password = get_password()
             if account['password'] == password:
-                return 'admin' if account['role'] == 'admin' else 'user'
+                return ('admin', account) if account['role'] == 'admin' else ('user', account)
             else:
                 attempts += 1
                 print(f"[🔐] Wrong password: Attempt {attempts}/3")

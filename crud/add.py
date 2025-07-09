@@ -77,7 +77,8 @@ def add_product():
         'name': name,
         'price': price,
         'stock': stock,
-        'category': category
+        'category': category,
+        
     }
 
     content.append(product)
