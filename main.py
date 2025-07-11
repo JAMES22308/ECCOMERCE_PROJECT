@@ -6,6 +6,7 @@ from crud.edit import edit_product
 from crud.delete import delete_product
 from crud.products import view_all_products
 from user_crud.add import add_user_product
+from user_crud.view import view_cart
 
 
 def option():
@@ -72,6 +73,12 @@ def user_get_options():
 
 def main():
     auth = authentication()
+
+    if not auth:
+        return
+
+
+
     if auth[0] == 'admin':
         print('admin account dashboard')
         while True:
@@ -100,13 +107,10 @@ def main():
             option = int(input('\nChoose an option: '))
             if option == 1:
                 add_user_product(user)
+            elif option == 2:
+                view_cart(user)
             else:
                 print('wrong key')
-            
-
-        
-
-
 
 
 if __name__ == '__main__':
