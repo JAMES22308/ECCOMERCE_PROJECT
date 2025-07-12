@@ -23,20 +23,33 @@ def account_cart(account, product_info, quantity):
 
 def product_quantity(products, item_order, user):
     found = False
+    id_found = False
     product_info = None
     for product in products:
         if product['id'] == item_order:
             id_found = True
             quantity = int(input('quantity: '))
             if quantity <= product['stock']:
-                current_quantity = product['stock'] - quantity
-                product['stock'] = current_quantity
+                # current_quantity = product['stock'] - quantity
+                # product['stock'] = current_quantity
                 product_info = product
                 found = True
+            if product['stock'] == 0:
+                print(f"❌ Sorry! {product['name']} is out of stock.")
+                return
+            
+            if quantity > product['stock']:
+                print(f'{product['stock']} pcs available atm, thanks!')
+                return
+    if not id_found:
+        print('id not found')
+        return
+    
 
     if found:
-        with open(PRODUCTS_INFO, 'w')as file:
-            json.dump(products, file, indent=4)
+        #dont save it till not place order
+        # with open(PRODUCTS_INFO, 'w')as file:
+        #     json.dump(products, file, indent=4)
 
         with open(DATA_ENTRY, 'r')as file:
             content = json.load(file)
@@ -51,7 +64,8 @@ def product_quantity(products, item_order, user):
                         account['cart'][index]['quantity'] = account['cart'][index]['quantity'] + quantity
                         account['cart'][index]['total_price'] = account['cart'][index]['quantity'] * product_info['price']
 
-                        print(f'quantity increased by {quantity}')
+                        print(f'📈 Quantity increased by {quantity}')
+
 
 
                     if not same_id:
@@ -62,7 +76,7 @@ def product_quantity(products, item_order, user):
                             'price': product_info['price'],
                             'total_price': product_info['price'] * quantity
                         })
-                        print('added to cart')
+                        print('🛒 Item successfully added to cart!')
 
                     with open(DATA_ENTRY, 'w')as file:
                         json.dump(content, file, indent=4)
