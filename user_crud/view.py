@@ -13,26 +13,22 @@ def cart_items(user):
     content = reader()
     total_cost = 0
 
-
-    print("="*40)  
-    print(" " * 12 + "🛒 Your Shopping Cart 🛒")
-    print("="*40) 
-    
+    print("\n🛒 ============= YOUR CART ============= 🛒\n")
 
     for entry in content:
         if entry['id'] == user['id']:
-            for key in entry['cart']:
-                print("product id: ",key['order_id'])
-                print("product name: ",key['product_name'])
-                print("product quantity: ",key['quantity'])
-                print("product price: ",key['price'])
-                print("\ntotal price: ",key['total_price'])
-                total_cost += key['total_price']
-                print("="* 40 )
+            for item in entry['cart']:
+                print(f"🆔  Product ID   : {item['order_id']}")
+                print(f"🏷️   Name         : {item['product_name']}")
+                print(f"🔢  Quantity     : {item['quantity']}")
+                print(f"💲  Price/Unit   : {item['price']}")
+                print(f"💰  Subtotal     : {item['total_price']}")
+                print("-" * 40 + "\n")
+                total_cost += item['total_price']
 
-    print("="*40) 
-    print(f"💸 Total Cost: ${total_cost:.2f}")
-    print("="*40) 
+    
+    print(f"🧾  Total Amount : {total_cost:.2f}")
+    print("\n" + "\n")
 
 
 
@@ -69,10 +65,11 @@ def edit_order(user):
     acc = account[0]
     acc2 = account[1]
     products = product_info()
-
+    id_not_found = False
     id = int(input('enter an id: '))
     for i in acc['cart']:
         if id == i['order_id']:
+            id_not_found = True
             quantity = int(input('new quantity: '))
             if quantity > i['quantity']:
                 for x in range(1, quantity):
@@ -96,6 +93,9 @@ def edit_order(user):
                                 json.dump(products, file, indent=4)
                             print('product deducted successfully')
                             return
+    if not id_not_found:
+        print('id not found')
+        return
 
     if increment:
         for product in products:
@@ -118,9 +118,113 @@ def edit_order(user):
                     print('out of stock')
                     return
 
+def delete_order(user):
+    entries = reader()
+    id_not_found = False
+    data = None
 
+    print("\n🗑️ ===== DELETE ORDER ITEM ===== 🗑️")
+    id = int(input('🔢 Enter Order ID to delete: '))
+
+    for entry in entries:
+        if entry['id'] == user['id']:
+            for i in entry['cart']:
+                if id == i['order_id']:
+                    id_not_found = True
+                    data = i
+                    entry['cart'].remove(i)
+
+                    with open(DATA_ENTRY, 'w') as file:
+                        json.dump(entries, file, indent=4)
+
+                    print(f"\n✅ Order ID {id} has been successfully removed.\n")
+
+    if not id_not_found:
+        print('\n❌ Order ID not found.\n')
+        return
+
+    # if data is not None:
+    #     products = product_info()
+    #     for product in products:
+    #         if product['id'] == data['order_id']:
+    #             product['stock'] = product['stock'] + data['quantity']
+    #             with open(PRODUCTS_INFO, 'w') as file:
+    #                 json.dump(products, file, indent=4)
+
+    #     print("📦 Product stock has been updated.\n")
+
+
+    
+       
+def place_order(user):
+    print("\nProceed with payment and place order?\n")
+    option = input("[y] Yes   [n] No   →  ").strip()
+    items = []
+    order_place = False
+    if option == 'y' or option == 'yes':
+        entries = reader()
+        for entry in entries:
+            if entry['id'] == user['id']:
+                for item in entry['cart']:
+                    products = product_info()
+                    for product in products:
+                        if item['order_id'] == product['id']:
+                            if item['quantity'] <= product['stock']:
+                                product['stock'] = product['stock'] - item['quantity']
+
+                                # with open(PRODUCTS_INFO, 'w')as file:
+                                #     json.dump(products, file, indent=4)
+                                items.append(item)
+                                order_place = True
+                            
+                            elif item['quantity'] > product['stock']:
+                                
+                                print(f'we got only {product['stock']} available, pls reduce the quantity, we are out of stock atm, thanks!')
+                                return
+                    
+    if order_place:
+        print('successfully placed order')
+        hold = False
+        hold_items = []
+        total = 0
+        entries = reader()
+        for entry in entries:
+            if entry['id'] == user['id']:
+                for i in entry['cart']:
+                    total += i['total_price']
+                    hold_items.append(i)
+                    hold = True
         
+        if hold:
 
+            ordered_items = {
+                'id': '001',
+                'items': hold_items,
+                'total_amount': total,
+                'status': 'processing',
+                'date': 'test'
+            }
+            
+            accounts = reader()
+            for entry in accounts:
+                if entry['id'] == user['id']:
+                    entry['orders'].append(ordered_items)
+
+                    
+
+            for items_placed in accounts:
+                if items_placed['id'] == user['id']:
+                    items_placed['cart'].clear()
+
+            with open(DATA_ENTRY, 'w')as file:
+                        json.dump(accounts, file, indent=4)
+            
+            with open(PRODUCTS_INFO, 'w')as file:
+                json.dump(products, file, indent=4)
+
+
+                                
+                            
     
 
 def view_cart(user):
@@ -129,10 +233,22 @@ def view_cart(user):
 
     while True:
         options()
-        chosen = int(input('Select an option: '))
+        chosen = input('Select an option: ').strip()
 
-        if chosen == 1:
+        if chosen == '1':
+            cart_items(user)
             edit_order(user)
+            return
+        elif chosen == '2':
+            cart_items(user)
+            delete_order(user)
+            return
+        elif chosen == '3':
+            cart_items(user)
+            place_order(user)
+        else:
+            print('returned back')
+            return
 
 
 

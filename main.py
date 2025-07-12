@@ -104,10 +104,10 @@ def main():
 
         while True:
             user_get_options()
-            option = int(input('\nChoose an option: '))
-            if option == 1:
+            option = input('\nChoose an option: ').strip()
+            if option == '1':
                 add_user_product(user)
-            elif option == 2:
+            elif option == '2':
                 view_cart(user)
             else:
                 print('wrong key')
