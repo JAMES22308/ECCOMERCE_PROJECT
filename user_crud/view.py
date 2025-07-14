@@ -58,65 +58,101 @@ def product_info():
         content = json.load(file)
     return content
 
+# def edit_order(user):
+#     increment_count = 0
+#     increment = False
+#     account = entry_finder(user)
+#     acc = account[0]
+#     acc2 = account[1]
+#     products = product_info()
+#     id_not_found = False
+#     id = int(input('enter an id: '))
+#     for i in acc['cart']:
+#         if id == i['order_id']:
+#             id_not_found = True
+#             quantity = int(input('new quantity: '))
+#             if quantity > i['quantity']:
+#                 for x in range(1, quantity):
+#                     if x >= i['quantity']:
+#                         increment_count += 1
+#                         increment = True
+
+#             elif quantity <= i['quantity']:
+#                 # deducted = i['quantity'] - quantity
+#                 # print(deducted)
+#                 # for product in products:
+#                 #     if id == product['id']:
+#                 #         product['stock'] = product['stock'] + deducted
+#                 #         if id == i['order_id']:
+#                 #             i['quantity'] = quantity
+#                 #             i['total_price'] = quantity * i['price']
+
+#                 with open(DATA_ENTRY, 'w')as file:
+#                     json.dump(acc2, file, indent=4)
+#                 with open(PRODUCTS_INFO, 'w')as file:
+#                     json.dump(products, file, indent=4)
+#                 print('product deducted successfully')
+#                 return
+#     if not id_not_found:
+#         print('id not found')
+#         return
+
+#     if increment:
+#         for product in products:
+#             if id == product['id']:
+#                 current_q = product['stock'] - increment_count
+#                 if current_q >= 0:
+#                     product['stock'] = current_q
+#                     for z in acc['cart']:
+#                         if id == z['order_id']:
+#                             z['quantity'] = quantity
+#                             z['total_price'] = z['price'] * quantity
+#                     with open(DATA_ENTRY, 'w')as file:
+#                         json.dump(acc2, file, indent=4)
+
+#                     with open(PRODUCTS_INFO, 'w')as file:
+#                         json.dump(products, file, indent=4)
+#                     print('updated successfully')
+
+#                 if current_q < 0:
+#                     print('out of stock')
+#                     return
+
 def edit_order(user):
-    increment_count = 0
-    increment = False
-    account = entry_finder(user)
-    acc = account[0]
-    acc2 = account[1]
+
+    entry_order = reader()
     products = product_info()
-    id_not_found = False
-    id = int(input('enter an id: '))
-    for i in acc['cart']:
-        if id == i['order_id']:
-            id_not_found = True
-            quantity = int(input('new quantity: '))
-            if quantity > i['quantity']:
-                for x in range(1, quantity):
-                    if x >= i['quantity']:
-                        increment_count += 1
-                        increment = True
+    id = int(input('enter the id: '))
+    for entry in entry_order:
+        if entry['id'] == user['id']:
+            if entry['cart']:
+                for item in entry['cart']:
+                    if id == item['order_id']:
+                        quantity = int(input('new quantity: '))
+                        for product in products:
+                            if product['id'] == id:
+                                if quantity > item['quantity']:
+                                    if quantity > product['stock']:
+                                        print('out of stock')
+                                        return
+                                    if quantity <= product['stock']:
+                                        item['quantity'] = quantity
+                                        
+                                        print(f'increased by {quantity} successfully')
+                                
+                                if quantity < item['quantity']:
+                                    item['quantity'] = quantity
+                                    print(f'decreased by {quantity} successfully')
 
-            if quantity < i['quantity']:
-                deducted = i['quantity'] - quantity
-                print(deducted)
-                for product in products:
-                    if id == product['id']:
-                        product['stock'] = product['stock'] + deducted
-                        if id == i['order_id']:
-                            i['quantity'] = quantity
-                            i['total_price'] = quantity * i['price']
+                                with open(DATA_ENTRY, 'w')as file:
+                                    json.dump(entry_order, file, indent=4)
 
-                            with open(DATA_ENTRY, 'w')as file:
-                                json.dump(acc2, file, indent=4)
-                            with open(PRODUCTS_INFO, 'w')as file:
-                                json.dump(products, file, indent=4)
-                            print('product deducted successfully')
-                            return
-    if not id_not_found:
-        print('id not found')
-        return
+                                    
+        
 
-    if increment:
-        for product in products:
-            if id == product['id']:
-                current_q = product['stock'] - increment_count
-                if current_q >= 0:
-                    product['stock'] = current_q
-                    for z in acc['cart']:
-                        if id == z['order_id']:
-                            z['quantity'] = quantity
-                            z['total_price'] = z['price'] * quantity
-                    with open(DATA_ENTRY, 'w')as file:
-                        json.dump(acc2, file, indent=4)
 
-                    with open(PRODUCTS_INFO, 'w')as file:
-                        json.dump(products, file, indent=4)
-                    print('updated successfully')
 
-                if current_q < 0:
-                    print('out of stock')
-                    return
+
 
 def delete_order(user):
     entries = reader()
@@ -170,11 +206,12 @@ def place_order(user):
                     for product in products:
                         if item['order_id'] == product['id']:
                             if item['quantity'] <= product['stock']:
+                                items.append(item)
+
                                 product['stock'] = product['stock'] - item['quantity']
 
-                                # with open(PRODUCTS_INFO, 'w')as file:
-                                #     json.dump(products, file, indent=4)
-                                items.append(item)
+                                with open(PRODUCTS_INFO, 'w')as file:
+                                    json.dump(products, file, indent=4)
                                 order_place = True
                             
                             elif item['quantity'] > product['stock']:
@@ -219,8 +256,8 @@ def place_order(user):
             with open(DATA_ENTRY, 'w')as file:
                         json.dump(accounts, file, indent=4)
             
-            with open(PRODUCTS_INFO, 'w')as file:
-                json.dump(products, file, indent=4)
+            # with open(PRODUCTS_INFO, 'w')as file:
+            #     json.dump(products, file, indent=4)
 
 
                                 
@@ -230,6 +267,7 @@ def place_order(user):
 def view_cart(user):
 
     cart_items(user)
+    
 
     while True:
         options()
