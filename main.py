@@ -7,6 +7,7 @@ from crud.delete import delete_product
 from crud.products import view_all_products
 from user_crud.add import add_user_product
 from user_crud.view import view_cart
+from user_crud.orders import view_orders
 
 
 def option():
@@ -109,6 +110,8 @@ def main():
                 add_user_product(user)
             elif option == '2':
                 view_cart(user)
+            elif option == '3':
+                view_orders(user)
             else:
                 print('wrong key')
 
