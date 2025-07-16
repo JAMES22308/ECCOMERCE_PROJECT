@@ -5,6 +5,7 @@ from crud.search import search_product
 from crud.edit import edit_product
 from crud.delete import delete_product
 from crud.products import view_all_products
+from crud.orders_status import order_status
 from user_crud.add import add_user_product
 from user_crud.view import view_cart
 from user_crud.orders import view_orders
@@ -51,6 +52,7 @@ def get_options():
         '3': 'edit',
         '4': 'delete',
         '5': 'all products',
+        '6': 'orders status',
         '0': 'logout'
     }
     print()
@@ -95,6 +97,8 @@ def main():
                     delete_product()
                 elif prompt == '5':
                     view_all_products()
+                elif prompt == '6':
+                    order_status()
                 elif prompt == '0':
                     print('logging out')
                     break
