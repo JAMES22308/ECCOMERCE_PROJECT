@@ -1,3 +1,4 @@
+import os, json
 from auth.register_page import register
 from auth.login_page import login
 from crud.add import add_product
@@ -9,6 +10,20 @@ from crud.orders_status import order_status
 from user_crud.add import add_user_product
 from user_crud.view import view_cart
 from user_crud.orders import view_orders
+
+
+def directory():
+    folder = 'database'
+    if os.path.exists(folder):
+        print()
+    else:
+        os.mkdir(folder)
+        files = ['counter_id.json', 'data_entries.json', 'product_id.json', 'products.json']
+        for file in files:
+            file_path = os.path.join(folder, file)
+            with open(file_path, 'w')as file:
+                file.write('')
+        
 
 
 def option():
@@ -76,6 +91,7 @@ def user_get_options():
     print('='*45 + '\n')
 
 def main():
+    directory()
 
     while True:
         auth = authentication()
