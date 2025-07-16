@@ -293,7 +293,6 @@ def view_cart(user):
 
     cart_items(user)
     
-
     while True:
         options()
         chosen = input('Select an option: ').strip()
@@ -309,6 +308,7 @@ def view_cart(user):
         elif chosen == '3':
             cart_items(user)
             place_order(user)
+            return
         else:
             print('returned back')
             return
