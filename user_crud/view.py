@@ -1,6 +1,7 @@
 import json
+from nanoid import generate
 from config import DATA_ENTRY, PRODUCTS_INFO
-
+import datetime
 
 
 def reader():
@@ -122,7 +123,13 @@ def edit_order(user):
 
     entry_order = reader()
     products = product_info()
-    id = int(input('enter the id: '))
+    id = input('enter the id: ')
+    id = int(id) if id and id.replace(' ', '').isdigit() else None
+
+    if id is None:
+        print('returned back')
+        return 
+    
     for entry in entry_order:
         if entry['id'] == user['id']:
             if entry['cart']:
@@ -137,11 +144,12 @@ def edit_order(user):
                                         return
                                     if quantity <= product['stock']:
                                         item['quantity'] = quantity
-                                        
+                                        item['total_price'] = quantity * item['price']
                                         print(f'increased by {quantity} successfully')
                                 
                                 if quantity < item['quantity']:
                                     item['quantity'] = quantity
+                                    item['total_price'] = quantity * item['price']
                                     print(f'decreased by {quantity} successfully')
 
                                 with open(DATA_ENTRY, 'w')as file:
@@ -160,7 +168,13 @@ def delete_order(user):
     data = None
 
     print("\n🗑️ ===== DELETE ORDER ITEM ===== 🗑️")
-    id = int(input('🔢 Enter Order ID to delete: '))
+    id = input('🔢 Enter Order ID to delete: ')
+
+    id = int(id) if id and id.replace(' ', '').isdigit() else None
+
+    if id is None:
+        print('returned back')
+        return
 
     for entry in entries:
         if entry['id'] == user['id']:
@@ -190,6 +204,15 @@ def delete_order(user):
     #     print("📦 Product stock has been updated.\n")
 
 
+
+def ordered_id():
+    id = generate(size=15)
+    return id
+
+
+def ordered_date():
+    return datetime.datetime.now()
+
     
        
 def place_order(user):
@@ -218,6 +241,8 @@ def place_order(user):
                                 
                                 print(f'we got only {product['stock']} available, pls reduce the quantity, we are out of stock atm, thanks!')
                                 return
+    else:
+        print('cancelled')
                     
     if order_place:
         print('successfully placed order')
@@ -235,11 +260,11 @@ def place_order(user):
         if hold:
 
             ordered_items = {
-                'id': '001',
+                'id': ordered_id(),
                 'items': hold_items,
                 'total_amount': total,
                 'status': 'processing',
-                'date': 'test'
+                'date': f'{ordered_date()}'
             }
             
             accounts = reader()
