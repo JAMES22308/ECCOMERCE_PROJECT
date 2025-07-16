@@ -1,6 +1,6 @@
 from auth.register_page import register
 from auth.login_page import login
-from crud.add import add_product, dic_reader
+from crud.add import add_product
 from crud.search import search_product
 from crud.edit import edit_product
 from crud.delete import delete_product
@@ -50,7 +50,8 @@ def get_options():
         '2': 'search',
         '3': 'edit',
         '4': 'delete',
-        '5': 'all products'
+        '5': 'all products',
+        '0': 'logout'
     }
     print()
     for key, value in options.items():
@@ -63,7 +64,7 @@ def user_get_options():
         '1': '🛍️ View All Products',
         '2': '🧺 View My Cart',
         '3': '📦 View My Orders',
-        '4': '🔓 Logout'
+        '0': '🔓 Logout'
     }
     print('\n' + '='*45)
     print("📋 What would you like to do today?")
@@ -73,47 +74,54 @@ def user_get_options():
     print('='*45 + '\n')
 
 def main():
-    auth = authentication()
 
-    if not auth:
-        return
+    while True:
+        auth = authentication()
 
+        if not auth:
+            return
+        if auth[0] == 'admin':
+            print('admin account dashboard')
+            while True:
+                get_options()
+                prompt = input('\nChoose an option: ')
+                if prompt == '1':
+                    add_product()
+                elif prompt == '2':
+                    search_product()
+                elif prompt == '3':
+                    edit_product()
+                elif prompt == '4':
+                    delete_product()
+                elif prompt == '5':
+                    view_all_products()
+                elif prompt == '0':
+                    print('logging out')
+                    break
+                else:
+                    print('wrong key')
+        
+        if auth[0] == 'user':
+            user = auth[1]
+            print('\n' + '='*50)
+            print(f"👋 Welcome, {user['email'].replace("@gmail.com", "")}!")
+            print("🧾 USER ACCOUNT DASHBOARD")
+            print('='*50)
 
-
-    if auth[0] == 'admin':
-        print('admin account dashboard')
-        while True:
-            get_options()
-            prompt = int(input('\nChoose an option: '))
-            if prompt == 1:
-                add_product()
-            elif prompt == 2:
-                search_product()
-            elif prompt == 3:
-                edit_product()
-            elif prompt == 4:
-                delete_product()
-            elif prompt == 5:
-                view_all_products()
-    
-    if auth[0] == 'user':
-        user = auth[1]
-        print('\n' + '='*50)
-        print(f"👋 Welcome, {user['email'].replace("@gmail.com", "")}!")
-        print("🧾 USER ACCOUNT DASHBOARD")
-        print('='*50)
-
-        while True:
-            user_get_options()
-            option = input('\nChoose an option: ').strip()
-            if option == '1':
-                add_user_product(user)
-            elif option == '2':
-                view_cart(user)
-            elif option == '3':
-                view_orders(user)
-            else:
-                print('wrong key')
+            while True:
+                user_get_options()
+                option = input('\nChoose an option: ').strip()
+                if option == '1':
+                    add_user_product(user)
+                elif option == '2':
+                    view_cart(user)
+                elif option == '3':
+                    view_orders(user)
+                elif option == '0':
+                    print('logging out')
+                    break
+                else:
+                    print('wrong key')
 
 
 if __name__ == '__main__':
