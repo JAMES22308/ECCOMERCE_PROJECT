@@ -290,28 +290,30 @@ def place_order(user):
     
 
 def view_cart(user):
+    try:
+        cart_items(user)
+        
+        while True:
+            options()
+            chosen = input('Select an option: ').strip()
 
-    cart_items(user)
-    
-    while True:
-        options()
-        chosen = input('Select an option: ').strip()
-
-        if chosen == '1':
-            cart_items(user)
-            edit_order(user)
-            return
-        elif chosen == '2':
-            cart_items(user)
-            delete_order(user)
-            return
-        elif chosen == '3':
-            cart_items(user)
-            place_order(user)
-            return
-        else:
-            print('returned back')
-            return
+            if chosen == '1':
+                cart_items(user)
+                edit_order(user)
+                return
+            elif chosen == '2':
+                cart_items(user)
+                delete_order(user)
+                return
+            elif chosen == '3':
+                cart_items(user)
+                place_order(user)
+                return
+            else:
+                print('returned back')
+                return
+    except json.decoder.JSONDecodeError:
+        print('no products at the moment')
 
 
 
