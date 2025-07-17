@@ -65,26 +65,29 @@ def unique_id():
 
 
 def add_product():
-    empty_list()
-    content = dic_reader()
-    name = product_name()
-    price = product_price()
-    stock = product_stock()
-    category = product_category()
+    try:
+        empty_list()
+        content = dic_reader()
+        name = product_name()
+        price = product_price()
+        stock = product_stock()
+        category = product_category()
 
-    product = {
-        'id': unique_id(),
-        'name': name,
-        'price': price,
-        'stock': stock,
-        'category': category,
-        
-    }
+        product = {
+            'id': unique_id(),
+            'name': name,
+            'price': price,
+            'stock': stock,
+            'category': category,
+            
+        }
 
-    content.append(product)
-    with open(PRODUCTS_INFO, 'w')as file:
-        json.dump(content, file, indent=4)
-    print('product has been added')
+        content.append(product)
+        with open(PRODUCTS_INFO, 'w')as file:
+            json.dump(content, file, indent=4)
+        print('product has been added')
+    except json.decoder.JSONDecodeError:
+        print('No data product yet')
 
     
 

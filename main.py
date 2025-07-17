@@ -1,4 +1,4 @@
-import os, json
+import os
 from auth.register_page import register
 from auth.login_page import login
 from crud.add import add_product
@@ -15,7 +15,7 @@ from user_crud.orders import view_orders
 def directory():
     folder = 'database'
     if os.path.exists(folder):
-        print()
+        print('')
     else:
         os.mkdir(folder)
         files = ['counter_id.json', 'data_entries.json', 'product_id.json', 'products.json']

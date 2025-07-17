@@ -49,7 +49,7 @@ def display_user():
 def order_status():
     display_user()
     entries = reader()
-    status_result = status_options()  # Assumed to return dict like {0: 'processing', 1: 'shipped', ...}
+    status_result = status_options() 
 
     print("\n" + "=" * 50)
     id = input("🔎 Select the user ID: ")

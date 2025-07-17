@@ -1,5 +1,5 @@
 import json
-from config import PRODUCTS_INFO, DATA_ENTRY
+from config import DATA_ENTRY
 from crud.add import dic_reader
 from crud.search import current_products
 
@@ -84,18 +84,21 @@ def product_quantity(products, item_order, user):
 
 
 def add_user_product(user):
-    products = dic_reader()
-    current_products(products)
+    try:
+        products = dic_reader()
+        current_products(products)
 
-    item_order = input('Enter Product ID to add to cart or press Enter to return: ').strip()
+        item_order = input('Enter Product ID to add to cart or press Enter to return: ').strip()
 
-    item_order = int(item_order) if item_order and item_order.replace(' ', '').isdigit() else None
+        item_order = int(item_order) if item_order and item_order.replace(' ', '').isdigit() else None
 
-    if item_order is None:
-        print('enter an id pls')
-        return 
-    
-    product_quantity(products, item_order, user)
+        if item_order is None:
+            print('enter an id pls')
+            return 
+        
+        product_quantity(products, item_order, user)
+    except json.decoder.JSONDecodeError:
+        print('no product at the moment')
 
     
 
