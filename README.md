@@ -4,6 +4,12 @@
 
 📋 Description
 
+The project requires running the James Browser. When prompted, type:
+
+www.ecommerce.com
+
+to access the eCommerce system.
+
 This is a CLI-based eCommerce system written in Python, supporting two types of users:
 
 Admin:
@@ -71,8 +77,3 @@ python3 main.py
 
 💻 4. Browser URL
 
-The project requires running the James Browser. When prompted, type:
-
-www.ecommerce.com
-
-to access the eCommerce system.
