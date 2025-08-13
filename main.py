@@ -16,8 +16,7 @@ import time
 
 def load_project(total_steps=20, delay=0.2):
     print("Loading Project:")
-    for _ in tqdm(range(total_steps), 
-                  bar_format='[{bar}] {percentage:3.0f}%'):
+    for _ in tqdm(range(total_steps)):
         time.sleep(delay)
     print("Loading Complete!\n")
 
@@ -100,6 +99,7 @@ def user_get_options():
     print('='*45 + '\n')
 
 def main():
+    load_project()
     directory()
 
     while True:
