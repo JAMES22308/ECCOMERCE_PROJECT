@@ -10,7 +10,16 @@ from crud.orders_status import order_status
 from user_crud.add import add_user_product
 from user_crud.view import view_cart
 from user_crud.orders import view_orders
+from tqdm import tqdm
+import time
 
+
+def load_project(total_steps=20, delay=0.2):
+    print("Loading Project:")
+    for _ in tqdm(range(total_steps), 
+                  bar_format='[{bar}] {percentage:3.0f}%'):
+        time.sleep(delay)
+    print("Loading Complete!\n")
 
 def directory():
     folder = 'database'
@@ -143,6 +152,20 @@ def main():
                 else:
                     print('wrong key')
 
+def browser():
+    print("Welcome to James Browser!")
+    while True:
+        url = input("\nEnter a URL (or type 'exit' to quit): ").strip()
+        
+        if url.lower() == "exit":
+            print("Exiting browser. Goodbye!")
+            break
+        elif url.lower() == "www.ecommerce.com":
+            main()  
+        else:
+            print(f"URL '{url}' not recognized. Try again or type 'exit' to quit.")
+            
+
 
 if __name__ == '__main__':
-    main()
+    browser()
